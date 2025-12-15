@@ -1,0 +1,13 @@
+# @package model
+_target_: src.models.gcn.GCN
+
+# Model architecture
+hidden_dim: 64
+num_layers: 2
+dropout: 0.1
+use_batch_norm: true
+use_residual: false
+
+# Task-specific settings
+num_tasks: 12  # Tox21 has 12 tasks
+task_type: multilabel_classification

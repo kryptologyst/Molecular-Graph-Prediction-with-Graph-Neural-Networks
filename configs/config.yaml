@@ -1,0 +1,27 @@
+# @package _global_
+defaults:
+  - model: gcn
+  - data: tox21
+  - train: default
+  - _self_
+
+# Experiment settings
+experiment_name: molecular_property_prediction
+seed: 42
+device: auto  # auto, cuda, mps, cpu
+
+# Logging
+log_dir: logs
+wandb:
+  project: molecular-gnn
+  entity: null
+  tags: [molecular, gnn, tox21]
+
+# Model checkpointing
+checkpoint_dir: checkpoints
+save_best: true
+save_last: true
+
+# Evaluation
+eval_interval: 5
+patience: 20

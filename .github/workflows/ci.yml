@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9, 3.10, 3.11]
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov
+    
+    - name: Lint with ruff
+      run: |
+        pip install ruff
+        ruff check src/ --output-format=github
+    
+    - name: Format check with black
+      run: |
+        pip install black
+        black --check src/
+    
+    - name: Test with pytest
+      run: |
+        python test_installation.py
+    
+    - name: Test model creation
+      run: |
+        python -c "
+        import sys
+        sys.path.append('src')
+        from src.models.gnn_models import GCN, GIN, MPNN
+        from omegaconf import DictConfig
+        config = DictConfig({'hidden_dim': 32, 'num_layers': 2, 'dropout': 0.1, 'use_batch_norm': True, 'use_residual': False, 'num_tasks': 12})
+        gcn = GCN(config)
+        gin = GIN(config)
+        mpnn = MPNN(config)
+        print('All models created successfully')
+        "

@@ -1,0 +1,23 @@
+# @package data
+_target_: src.data.datasets.Tox21Dataset
+
+# Dataset settings
+dataset_name: Tox21
+data_dir: data/raw
+processed_dir: data/processed
+
+# Data splits
+train_ratio: 0.7
+val_ratio: 0.15
+test_ratio: 0.15
+split_type: scaffold  # random, scaffold, stratified
+
+# Data loading
+batch_size: 32
+num_workers: 4
+pin_memory: true
+
+# Data augmentation
+augment: false
+augment_prob: 0.1
+augment_types: [edge_drop, feature_mask]
